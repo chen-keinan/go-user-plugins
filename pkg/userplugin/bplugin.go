@@ -1,4 +1,4 @@
-package bplugin
+package userplugin
 
 import (
 	"fmt"
