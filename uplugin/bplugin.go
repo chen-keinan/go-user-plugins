@@ -1,4 +1,4 @@
-package userplugin
+package uplugin
 
 import (
 	"fmt"
