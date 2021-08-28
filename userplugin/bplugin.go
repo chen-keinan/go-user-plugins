@@ -2,13 +2,14 @@ package userplugin
 
 import (
 	"fmt"
-  	"io/ioutil"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
 	"plugin"
+	"reflect"
 )
 
 // PluginLoader keeps the context needed to find where ObjPlugins and
@@ -80,21 +81,27 @@ func (l *PluginLoader) compile(name string) (string, error) {
 // Load loads the plugin object in the given path and runs the Run
 // function.
 func (l *PluginLoader) Load(object string, hookName string) (plugin.Symbol, error) {
-	p, err := plugin.Open(object)
+	fullPath := path.Join(l.objectsDir, object)
+	p, err := plugin.Open(fullPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not open %s: %v", object, err)
+		return fmt.Println(err.Error())
 	}
 	return p.Lookup(hookName)
 }
 
-/*//ExecuteK8sAuditResults execute on K8s api call hook
-func ExecuteK8sAuditResults(sym plugin.Symbol, auditEvt models.KubeAuditResults) error {
-	runFunc, ok := sym.(func(netEvent models.KubeAuditResults) error)
-	if !ok {
-		return fmt.Errorf("found Run but type is %T instead of func() error", sym)
+func (l *PluginLoader) InvokeFunc(sym plugin.Symbol, params ...interface{}) (interface{}, error) {
+	f := reflect.ValueOf(sym)
+	if len(params) != f.Type().NumIn() {
+		return nil, fmt.Errorf("The number of params is out of index.")
 	}
-	return runFunc(auditEvt)
-}*/
+	in := make([]reflect.Value, len(params))
+	for k, param := range params {
+		in[k] = reflect.ValueOf(param)
+	}
+	var res []reflect.Value
+	res = f.Call(in)
+	return res[0].Interface(), nil
+}
 
 //Plugins lists all the files in the ObjPlugins
 func (l *PluginLoader) Plugins() ([]string, error) {
