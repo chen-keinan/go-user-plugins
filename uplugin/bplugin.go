@@ -21,21 +21,12 @@ type PluginLoader struct {
 
 //NewPluginLoader return new plugin loader object with src and compiled folders
 func NewPluginLoader(obgPath string) (*PluginLoader, error) {
-	return &PluginLoader{objectsDir: obgPath}, nil
+	return &PluginLoader{objectsDir: obgPath,pluginsDir: obgPath}, nil
 }
 
 //Compile the go plugin in a given path and hook name and return it symbol
-func (l *PluginLoader) Compile(name string, hookName string) (plugin.Symbol, error) {
-	obj, err := l.compile(name)
-	if err != nil {
-		return nil, fmt.Errorf("could not compile %s: %v", name, err)
-	}
-
-	var sym plugin.Symbol
-	if sym, err = l.Load(obj, hookName); err != nil {
-		return nil, fmt.Errorf("could not compile %s: %v", name, err)
-	}
-	return sym, nil
+func (l *PluginLoader) Compile(name string) (string, error) {
+	return l.compile(name)
 }
 
 // compile compiles the code in the given path, builds a
@@ -46,9 +37,10 @@ func (l *PluginLoader) compile(name string) (string, error) {
 	// each time, to avoid retrieving the cached version.
 	// Apparently the cache key is the path of the file compiled and
 	// there's no way to invalidate it.
-	f, err := ioutil.ReadFile(filepath.Join(l.pluginsDir, name))
+	fullPath := filepath.Join(l.pluginsDir, name)
+	f, err := ioutil.ReadFile(fullPath)
 	if err != nil {
-		return "", fmt.Errorf("could not read %s: %v", name, err)
+		return "", fmt.Errorf("could not read %s: %v", fullPath, err)
 	}
 
 	name = fmt.Sprintf("%d.go", rand.Int())
