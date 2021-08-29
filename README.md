@@ -67,7 +67,7 @@ func Test() string {
  go build -buildmode=plugin -o ./objFolder/test.so ./soureFolder/test.go
 ```
 
-#### test.go (source plugin)
+#### Load and invoke plugin
 ```go
 //Test this plugin
 userPlugin:= NewPluginLoader("./soureFolder", "./objFolder")
