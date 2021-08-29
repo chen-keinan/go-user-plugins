@@ -43,13 +43,8 @@ fmt.Println(fmt.Sprintf("compiled plugin name %s",compiledPlugin))
 userPlugin:= NewPluginLoader("./soureFolder", "./objFolder")
 compiledPluginName:="test.so"
 pluginMethodName:="Test"
-// load plugin method symbol
-methodsymbol, err:=userPlugin.Load(compiledPluginName,pluginMethodName)
-if err != nil {
-    fmt.Print(err.Error())
-}
-// invoke plugin method symbol
-results,err:=userPlugin.InvokeFunc(methodSymbol)
+// load and invoke plugin method
+results,err:=userPlugin.InvokeFunc(compiledPluginName,pluginMethodName)
 if err != nil {
   fmt.Print(err.Error())
 }
@@ -78,13 +73,8 @@ func Test() string {
 userPlugin:= NewPluginLoader("./soureFolder", "./objFolder")
 compiledPluginName:="test.so"
 pluginMethodName:="Test"
-// load plugin method symbol
-methodsymbol, err:=userPlugin.Load(compiledPluginName,pluginMethodName)
-if err != nil {
-    fmt.Print(err.Error())
-}
-// invoke plugin method symbol
-results,err:=userPlugin.InvokeFunc(methodSymbol)
+// load and invoke plugin method
+results,err:=userPlugin.InvokeFunc(compiledPluginName,pluginMethodName)
 if err != nil {
     fmt.Print(err.Error())
 }

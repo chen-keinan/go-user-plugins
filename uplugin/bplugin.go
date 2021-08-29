@@ -92,7 +92,11 @@ func (l *PluginLoader) Load(object string, hookName string) (plugin.Symbol, erro
 }
 
 //InvokeFunc invoke plugin function with params and return it results
-func (l *PluginLoader) InvokeFunc(sym plugin.Symbol, params ...interface{}) ([]interface{}, error) {
+func (l *PluginLoader) InvokeFunc(plugin, method string, params ...interface{}) ([]interface{}, error) {
+	sym, err := l.Load(plugin, method)
+	if err != nil {
+		return nil, err
+	}
 	results := make([]interface{}, 0)
 	f := reflect.ValueOf(sym)
 	if len(params) != f.Type().NumIn() {

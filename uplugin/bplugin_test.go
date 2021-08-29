@@ -22,17 +22,14 @@ func TestInvokeFunc(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pl := NewPluginLoader("./fixture", "./fixture")
-			sym, err := pl.Load(tt.pluginPath, tt.pluginMethod)
-			if err != nil {
-				t.Errorf("failed to open plugin %s", tt.pluginPath)
-			}
 			var got []interface{}
+			var err error
 			if len(tt.wantParam) == 0 {
-				if got, err = pl.InvokeFunc(sym); err != nil {
+				if got, err = pl.InvokeFunc(tt.pluginPath, tt.pluginMethod); err != nil {
 					t.Errorf("TestInvokeFunc() failed to invoke function %s  error:%s", tt.pluginMethod, err.Error())
 				}
 			} else {
-				if got, err = pl.InvokeFunc(sym, tt.wantParam); err != nil {
+				if got, err = pl.InvokeFunc(tt.pluginPath, tt.pluginMethod, tt.wantParam); err != nil {
 					t.Errorf("TestInvokeFunc() failed to invoke function %s error:%s ", tt.pluginMethod, err.Error())
 				}
 			}
