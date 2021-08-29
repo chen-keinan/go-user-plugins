@@ -27,8 +27,8 @@ type PluginLoader struct {
 }
 
 //NewPluginLoader return new plugin loader object with src and compiled folders
-func NewPluginLoader(obgPath string) (*PluginLoader) {
-	return &PluginLoader{objectsDir: obgPath, pluginsDir: obgPath}
+func NewPluginLoader(sourcePath, objPath string) *PluginLoader {
+	return &PluginLoader{objectsDir: objPath, pluginsDir: sourcePath}
 }
 
 //Compile the go plugin in a given path and hook name and return it symbol

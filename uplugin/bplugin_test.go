@@ -21,7 +21,7 @@ func TestInvokeFunc(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pl := NewPluginLoader("./fixture")
+			pl := NewPluginLoader("./fixture", "./fixture")
 			sym, err := pl.Load(tt.pluginPath, tt.pluginMethod)
 			if err != nil {
 				t.Errorf("failed to open plugin %s", tt.pluginPath)
@@ -61,7 +61,7 @@ func TestCompile(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pl := NewPluginLoader("./fixture")
+			pl := NewPluginLoader("./fixture", "./fixture")
 			var objName string
 			var err error
 			if objName, err = pl.Compile(tt.sourceName); err != nil {
@@ -96,7 +96,7 @@ func TestPlugins(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pl := NewPluginLoader(tt.pluginDir)
+			pl := NewPluginLoader(tt.pluginDir, tt.pluginDir)
 			var plugins []string
 			var err error
 			if plugins, err = pl.Plugins(tt.ext); err != nil {
