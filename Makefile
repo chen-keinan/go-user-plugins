@@ -5,7 +5,7 @@ GOMOD=$(GOCMD) mod
 GOTEST=$(GOCMD) test
 
 all:
-	$(info  "completed running make file for go-command-eval")
+	$(info  "completed running make file for go-user-plugins")
 fmt:
 	@go fmt ./...
 lint:
