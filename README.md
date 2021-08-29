@@ -86,9 +86,9 @@ func main() {
 	//Test this plugin
 	userPlugin := uplugin.NewPluginLoader("./soureFolder", "./objFolder")
 	compiledPluginName := "test.so"
-	pluginMethodName := "Test"
+	pluginFuncdName := "Test"
 	// load and invoke plugin method
-	results, err := userPlugin.LoadAndInvoke(compiledPluginName, pluginMethodName, "string value")
+	results, err := userPlugin.LoadAndInvoke(compiledPluginName, pluginFuncdName, "string value")
 	if err != nil {
 		fmt.Print(err.Error())
 		os.Exit(1)
