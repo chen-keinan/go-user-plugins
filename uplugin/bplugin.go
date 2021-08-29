@@ -91,18 +91,18 @@ func (l *PluginLoader) Load(object string, hookName string) (plugin.Symbol, erro
 	return p.Lookup(hookName)
 }
 
+//InvokeFunc invoke plugin function with params and return it results
 func (l *PluginLoader) InvokeFunc(sym plugin.Symbol, params ...interface{}) ([]interface{}, error) {
 	results := make([]interface{}, 0)
 	f := reflect.ValueOf(sym)
 	if len(params) != f.Type().NumIn() {
-		return nil, fmt.Errorf("The number of params is out of index.")
+		return nil, fmt.Errorf("the number of params %d is out of index", len(params))
 	}
 	in := make([]reflect.Value, len(params))
 	for k, param := range params {
 		in[k] = reflect.ValueOf(param)
 	}
-	var res []reflect.Value
-	res = f.Call(in)
+	res := f.Call(in)
 	if len(res) > 0 {
 		for _, r := range res {
 			results = append(results, r.Interface())
