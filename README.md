@@ -75,12 +75,12 @@ pluginMethodName:="Test"
 // load plugin method symbol
 methodsymbol, err:=userPlugin.Load(compiledPluginName,pluginMethodName)
 if err != nil {
-fmt.Print(err.Error())
+    fmt.Print(err.Error())
 }
 // invoke plugin method symbol
 results,err:=userPlugin.InvokeFunc(methodSymbol)
 if err != nil {
-fmt.Print(err.Error())
+    fmt.Print(err.Error())
 }
 res:=results[0].(string)
 fmt.Println(fmt.Sprintf(res)
