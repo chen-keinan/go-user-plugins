@@ -2,6 +2,7 @@ package uplugin
 
 import (
 	"fmt"
+	"github.com/chen-keinan/lxd-probe/pkg/models"
 	"os"
 	"strings"
 	"testing"
@@ -12,19 +13,21 @@ func TestInvokeFunc(t *testing.T) {
 		name         string
 		pluginPath   string
 		pluginMethod string
-		wantParam    string
+		wantParam    interface{}
 		wantResult   string
 	}{
 		{name: "plugin no input and no output", pluginPath: "test_no_input_no_output.so", pluginMethod: "Test", wantParam: "", wantResult: ""},
 		{name: "plugin and no output", pluginPath: "test_no_output.so", pluginMethod: "Test", wantParam: "param test", wantResult: ""},
 		{name: "plugin test", pluginPath: "test.so", pluginMethod: "Test", wantParam: "param test", wantResult: "return from test"},
+		{name: "plugin auditHook", pluginPath: "auditHook.so", pluginMethod: "AuditHook", wantParam: models.AuditBenchResult{Name: "AuditHook"}, wantResult: "AuditHook"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pl := NewPluginLoader("./fixture", "./fixture")
 			var got []interface{}
 			var err error
-			if len(tt.wantParam) == 0 {
+			v, ok := tt.wantParam.(string)
+			if ok && len(v) == 0 {
 				if got, err = pl.LoadAndInvoke(tt.pluginPath, tt.pluginMethod); err != nil {
 					t.Errorf("TestInvokeFunc() failed to invoke function %s  error:%s", tt.pluginMethod, err.Error())
 				}
@@ -89,7 +92,7 @@ func TestPlugins(t *testing.T) {
 	}{
 		{name: "source plugins", ext: SourceExt, want: 1, pluginDir: "./fixture", err: nil},
 		{name: "plugin bad folder", ext: SourceExt, want: 1, pluginDir: "./fixture1", err: fmt.Errorf("open ./fixture1: no such file or directory")},
-		{name: "compiled plugins", ext: CompiledExt, pluginDir: "./fixture", want: 3, err: nil},
+		{name: "compiled plugins", ext: CompiledExt, pluginDir: "./fixture", want: 4, err: nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
