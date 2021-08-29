@@ -1,3 +1,4 @@
+<br><img src="./pkg/img/golang-plugins.png" width="300" alt="golang plugin logo"><br>
 # go-user-plugins
 
 go-user-plugins is an open source lib who perform action on user plugin ,plugin generation from source ,load and invoke a plugin method
