@@ -25,11 +25,11 @@ func TestInvokeFunc(t *testing.T) {
 			var got []interface{}
 			var err error
 			if len(tt.wantParam) == 0 {
-				if got, err = pl.InvokeFunc(tt.pluginPath, tt.pluginMethod); err != nil {
+				if got, err = pl.LoadAndInvoke(tt.pluginPath, tt.pluginMethod); err != nil {
 					t.Errorf("TestInvokeFunc() failed to invoke function %s  error:%s", tt.pluginMethod, err.Error())
 				}
 			} else {
-				if got, err = pl.InvokeFunc(tt.pluginPath, tt.pluginMethod, tt.wantParam); err != nil {
+				if got, err = pl.LoadAndInvoke(tt.pluginPath, tt.pluginMethod, tt.wantParam); err != nil {
 					t.Errorf("TestInvokeFunc() failed to invoke function %s error:%s ", tt.pluginMethod, err.Error())
 				}
 			}

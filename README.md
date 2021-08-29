@@ -44,7 +44,7 @@ userPlugin:= NewPluginLoader("./soureFolder", "./objFolder")
 compiledPluginName:="test.so"
 pluginMethodName:="Test"
 // load and invoke plugin method
-results,err:=userPlugin.InvokeFunc(compiledPluginName,pluginMethodName)
+results,err:=userPlugin.LoadAndInvoke(compiledPluginName,pluginMethodName)
 if err != nil {
   fmt.Print(err.Error())
 }
@@ -74,7 +74,7 @@ userPlugin:= NewPluginLoader("./soureFolder", "./objFolder")
 compiledPluginName:="test.so"
 pluginMethodName:="Test"
 // load and invoke plugin method
-results,err:=userPlugin.InvokeFunc(compiledPluginName,pluginMethodName)
+results,err:=userPlugin.LoadAndInvoke(compiledPluginName,pluginMethodName)
 if err != nil {
     fmt.Print(err.Error())
 }
