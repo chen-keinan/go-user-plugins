@@ -12,6 +12,13 @@ import (
 	"reflect"
 )
 
+const (
+	//SourceExt const
+	SourceExt = ".go"
+	//CompiledExt const
+	CompiledExt = ".so"
+)
+
 // PluginLoader keeps the context needed to find where ObjPlugins and
 // objects are stored.
 type PluginLoader struct {
@@ -20,8 +27,8 @@ type PluginLoader struct {
 }
 
 //NewPluginLoader return new plugin loader object with src and compiled folders
-func NewPluginLoader(obgPath string) (*PluginLoader, error) {
-	return &PluginLoader{objectsDir: obgPath,pluginsDir: obgPath}, nil
+func NewPluginLoader(obgPath string) (*PluginLoader) {
+	return &PluginLoader{objectsDir: obgPath, pluginsDir: obgPath}
 }
 
 //Compile the go plugin in a given path and hook name and return it symbol
@@ -54,6 +61,10 @@ func (l *PluginLoader) compile(name string) (string, error) {
 		if err != nil {
 			fmt.Print(err.Error())
 		}
+		err = os.Remove(path.Join(l.pluginsDir, name))
+		if err != nil {
+			fmt.Print(err.Error())
+		}
 	}()
 	_, err = fileCreated.WriteString(string(f))
 	if err != nil {
@@ -66,7 +77,6 @@ func (l *PluginLoader) compile(name string) (string, error) {
 	if err := cmd.Run(); err != nil {
 		return "", fmt.Errorf("could not compile %s: %v", name, err)
 	}
-
 	return objectPath, nil
 }
 
@@ -102,7 +112,7 @@ func (l *PluginLoader) InvokeFunc(sym plugin.Symbol, params ...interface{}) ([]i
 }
 
 //Plugins lists all the files in the ObjPlugins
-func (l *PluginLoader) Plugins() ([]string, error) {
+func (l *PluginLoader) Plugins(ext string) ([]string, error) {
 	dir, err := os.Open(l.pluginsDir)
 	if err != nil {
 		return nil, err
@@ -120,34 +130,8 @@ func (l *PluginLoader) Plugins() ([]string, error) {
 
 	var res []string
 	for _, name := range names {
-		if filepath.Ext(name) == ".go" {
+		if filepath.Ext(name) == ext {
 			res = append(res, name)
-		}
-	}
-	return res, nil
-}
-
-//ObjPlugins lists all the files in the ObjPlugins
-func (l *PluginLoader) ObjPlugins() ([]string, error) {
-	dir, err := os.Open(l.objectsDir)
-	if err != nil {
-		return nil, err
-	}
-	defer func() {
-		err = dir.Close()
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}()
-	names, err := dir.Readdirnames(-1)
-	if err != nil {
-		return nil, err
-	}
-
-	var res []string
-	for _, name := range names {
-		if filepath.Ext(name) == ".so" {
-			res = append(res, path.Join(l.objectsDir, name))
 		}
 	}
 	return res, nil
