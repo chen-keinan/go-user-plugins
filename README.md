@@ -21,7 +21,7 @@ go get github.com/chen-keinan/go-user-plugins
 ```
 
 ## Usage
-### Generate plugin from source
+### Compile plugin from source
 
 ```go
 // init plugin folder
