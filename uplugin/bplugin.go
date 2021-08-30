@@ -86,7 +86,7 @@ func (l *PluginLoader) Load(object string, hookName string) (plugin.Symbol, erro
 	fullPath := path.Join(l.objectsDir, object)
 	p, err := plugin.Open(fullPath)
 	if err != nil {
-		return fmt.Println(err.Error())
+		return nil, err
 	}
 	return p.Lookup(hookName)
 }
