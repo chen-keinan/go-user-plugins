@@ -120,9 +120,14 @@ func (l *PluginLoader) Invoke(sym plugin.Symbol, params ...interface{}) ([]inter
 	return results, nil
 }
 
+//nolint gosec
 //Plugins lists all the files in the ObjPlugins
 func (l *PluginLoader) Plugins(ext string) ([]string, error) {
-	dir, err := os.Open(l.pluginsDir)
+	pluginFolder := l.pluginsDir
+	if ext == CompiledExt {
+		pluginFolder = l.objectsDir
+	}
+	dir, err := os.Open(pluginFolder)
 	if err != nil {
 		return nil, err
 	}
