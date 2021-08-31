@@ -97,6 +97,7 @@ func main() {
 	fmt.Println(fmt.Sprintf(res)
 }
 ```
+Note: Plugin and binary must compile with the same linux env
 
 ## Contribution
 
