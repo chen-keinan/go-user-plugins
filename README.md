@@ -7,7 +7,7 @@
 # go-user-plugins
 
 go-user-plugins is an open source lib who perform action on user plugin ,plugin generation from source ,load and invoke
-a plugin method
+a plugin method.
 
 * [Installation](#installation)
 * [Usage](#usage)
