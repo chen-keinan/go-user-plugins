@@ -1,5 +1,4 @@
 SHELL := /bin/bash
-
 GOCMD=go
 GOMOD=$(GOCMD) mod
 GOTEST=$(GOCMD) test
