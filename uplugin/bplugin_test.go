@@ -2,7 +2,6 @@ package uplugin
 
 import (
 	"fmt"
-	"github.com/chen-keinan/lxd-probe/pkg/models"
 	"os"
 	"strings"
 	"testing"
@@ -19,7 +18,7 @@ func TestInvokeFunc(t *testing.T) {
 		{name: "plugin no input and no output", pluginPath: "test_no_input_no_output.so", pluginMethod: "Test", wantParam: "", wantResult: ""},
 		{name: "plugin and no output", pluginPath: "test_no_output.so", pluginMethod: "Test", wantParam: "param test", wantResult: ""},
 		{name: "plugin test", pluginPath: "test.so", pluginMethod: "Test", wantParam: "param test", wantResult: "return from test"},
-		{name: "plugin auditHook", pluginPath: "auditHook.so", pluginMethod: "AuditHook", wantParam: models.AuditBenchResult{Name: "AuditHook"}, wantResult: "AuditHook"},
+		{name: "plugin auditHook", pluginPath: "auditHook.so", pluginMethod: "AuditHook", wantParam: AuditBenchResult{Name: "AuditHook"}, wantResult: "AuditHook"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -56,7 +55,7 @@ func TestCompile(t *testing.T) {
 		err        error
 		wantResult string
 	}{
-		{name: "compile and invoke", sourceName: "test.go", funcName: "Test", wantResult: "test string", suffix: CompiledExt, err: nil},
+		{name: "compile and invoke", sourceName: "main_prog.go", funcName: "Test", wantResult: "test string", suffix: CompiledExt, err: nil},
 		{name: "compile ano file exist", sourceName: "test1.go", funcName: "Test", wantResult: "test string", suffix: CompiledExt, err: fmt.Errorf("could not read fixture/test1.go: open fixture/test1.go: no such file or directory")},
 	}
 	for _, tt := range tests {
@@ -111,4 +110,18 @@ func TestPlugins(t *testing.T) {
 			}
 		})
 	}
+}
+
+//AuditBenchResult data model
+type AuditBenchResult struct {
+	Name                 string   `yaml:"name"`
+	ProfileApplicability string   `yaml:"profile_applicability"`
+	Category             string   `yaml:"category"`
+	Description          string   `yaml:"description"`
+	AuditCommand         []string `json:"audit_command"`
+	Remediation          string   `yaml:"remediation"`
+	Impact               string   `yaml:"impact"`
+	AdditionalInfo       string   `yaml:"additional_info"`
+	References           []string `yaml:"references"`
+	TestResult           string   `yaml:"test_result"`
 }
